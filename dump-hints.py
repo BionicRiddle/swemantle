@@ -68,7 +68,7 @@ hints = {}
 with open("static/assets/js/secretWords.js") as f:
     for line in f.readlines():
         line = line.strip()
-        if not '"' in line:
+        if not line.startswith('"'):
             continue
         secret = line.strip('",')
         target_vec = model[secret]
