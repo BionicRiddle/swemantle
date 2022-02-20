@@ -24,30 +24,22 @@
 -->
   </head>
   <body>
-    <h2>Semantle</h2>
+    <h2><font color="#fa6607"> <font color="#0000FF">S</font><font color="#FFFF00">w</font><font color="#0000FF">e</font>mantle</font></h2>
     
-    <h3>Guess the secret word</h3>
+    <h3>Gissa det hemliga ordet</h3>
     <p>
-      Each guess must be a word (of any length) or short phrase.  The
-      game will tell you how semantically similar it thinks your word
-      is to the secret word.  Unlike that other word game, it's not
-      about the spelling; it's about the meaning. The similarity value
-      comes from Word2vec.  The highest possible similarity is 100
-      (indicating that the words are identical and you have won).  By
-      "semantically similar", I mean, roughly "used in the context of
-      similar words, in a database of news articles."
+      Varje gissning måste vara ett ord (av valfri längd). Spelet kommer att berätta hur semantiskt likt ditt ord
+      är till det hemliga ordet. Till skillnad från det andra ordspelet är det inte det
+      om stavningen; det handlar om meningen. Likhetsvärdet
+      kommer från Word2vec. Den högsta möjliga likheten är 100
+      (vilket indikerar att ditt ord och det hemliga ordet är lika och att du har vunnit). Att ett ord är "semantiskt lik", betyder ungefär att det används i samband med
+      liknande ord i t.ex. nyhetsartiklar.
     </p>
     <p>
-      Secret words may be any part of speech, but will always be
-      single words.  It's tempting to think only of nouns, since that
-      is how normal semantic word-guessing games work.  Don't get
-      caught in the trap!  Since our Word2vec data set contains some
-      proper nouns, guesses are case-sensitive.  But I removed all but
-      lower-case words from the secret word set, and if your word
-      matches the secret word but for case, you win anyway.  So if you
-      want to know if the word is more like nice
-      or <a href="https://en.wikipedia.org/wiki/Nice">Nice</a>, you
-      can ask about both.
+      Det hemliga ord kan vara vilken del av en mening som helst, men kommer alltid att vara ett enstaka ord.
+      Det är frestande att bara tänka på substantiv, eftersom det
+      är hur vanliga semantiska ordgissningsspel fungerar. Men låt dig inte luras! Vår Word2vec-datauppsättning innehåller inte bara Substantiv, alla gissningar är skiftlägeskänsliga. Men alla möjliga hemliga ord består av små bokstäver,
+      Om du anger ett ord som "Nice" och det hemliga ordet är nice så kommer du få rätt och vinna ändå.
     </p>
     <p>
       The "Getting close" indicator tells you how close you are --if

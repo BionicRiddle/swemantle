@@ -126,7 +126,7 @@ function guessRow(similarity, oldGuess, percentile, guessNumber, guess) {
     let progress = "";
     let cls = "";
     if (similarity >= similarityStory.rest * 100) {
-        percentileText = '<span class="weirdWord">????<span class="tooltiptext">Unusual word found!  This word is not in the list of &quot;normal&quot; words that we use for the top-1000 list, but it is still similar! (Is it maybe capitalized?)</span></span>';
+        percentileText = '<span class="weirdWord">????<span class="tooltiptext">Ovanlig stavning hittat! Detta ord finns inte i listan över &quot;normala&quot; ord som används i top-1000 list, men det är likt! (Testa alternativ stavning?)</span></span>';
     }
     if (percentile) {
         if (percentile == 1000) {
@@ -154,17 +154,17 @@ function updateLocalTime() {
     const now = new Date();
     now.setUTCHours(24, 0, 0, 0);
 
-    $('#localtime').innerHTML = `or ${now.getHours()}:00 your time`;
+    $('#localtime').innerHTML = `or ${now.getHours()}:00 din tid`;
 }
 
 function solveStory(guesses, puzzleNumber) {
     const guess_count = guesses.length;
     if (guess_count == 0) {
-        return `I gave up on Semantle ${puzzleNumber} without even guessing once.`;
+        return `Jag gav upp Swemantle ${puzzleNumber} utan att ens gissa en gång.`;
     }
 
     if (guess_count == 1) {
-        return `I got Semantle ${puzzleNumber} on my first guess!`;
+        return `Jag löste Swemantle ${puzzleNumber} på min första gissning!`;
     }
 
     let describe = function(similarity, percentile) {
@@ -197,7 +197,7 @@ function solveStory(guesses, puzzleNumber) {
     [similarity, old_guess, percentile, guess_number] = penultimate_guess;
     const penultimate_guess_msg = `My penultimate guess ${describe(similarity, percentile)}.`;
 
-    return `I solved Semantle #${puzzleNumber} in ${guess_count} guesses. ${first_guess}${first_hit}${penultimate_guess_msg} https://semantle.novalis.org/`;
+    return `I solved Swemantle #${puzzleNumber} in ${guess_count} guesses. ${first_guess}${first_hit}${penultimate_guess_msg} https://swemantle.riddle.nu/`;
 }
 
 let Semantle = (function() {
@@ -350,7 +350,7 @@ similarity of ${(similarityStory.rest * 100).toFixed(2)}.
     }
 
     function updateGuesses(guess) {
-        let inner = `<tr><th id="chronoOrder">#</th><th id="alphaOrder">Guess</th><th id="similarityOrder">Similarity</th><th>Getting close?</th></tr>`;
+        let inner = `<tr><th id="chronoOrder">#</th><th id="alphaOrder">Gissning</th><th id="similarityOrder">Similarity</th><th>Nära?</th></tr>`;
         /* This is dumb: first we find the most-recent word, and put
            it at the top.  Then we do the rest. */
         for (let entry of guesses) {
