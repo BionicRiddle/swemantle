@@ -4,6 +4,7 @@
  */
 secretWords = [
 "huvudstad",
+"ben",
 "fördel",
 "utesluta",
 "expertis",
@@ -25,7 +26,6 @@ secretWords = [
 "skjuta",
 "kött",
 "tänka",
-"ben",
 "gränd",
 "staty",
 "välj",
