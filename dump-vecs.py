@@ -2,7 +2,7 @@ import gensim.models.keyedvectors as word2vec
 
 import sqlite3
 
-model = word2vec.KeyedVectors.load_word2vec_format("../GoogleNews-vectors-negative300.bin", binary=True)
+model = word2vec.KeyedVectors.load_word2vec_format("../swectors-300dim.vec", binary=False)
 
 con = sqlite3.connect('word2vec.db')
 cur = con.cursor()
@@ -11,12 +11,12 @@ con.commit()
 cur.execute("""create unique index if not exists word2vec_word on word2vec (word)""");
 con.commit()
 
-import pdb;pdb.set_trace()
+#import pdb;pdb.set_trace()
 
-for i, word in enumerate(model.vocab):
+for i, word in enumerate(model.key_to_index):
     if (i % 1111 == 0):
         con.commit()
-    vec = model[word].tostring()
+    vec = model[word].tobytes()
     cur.execute("insert into word2vec values(?,?)", (word,vec))
 
 con.commit()

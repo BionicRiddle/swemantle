@@ -27,7 +27,7 @@ def debug(sig, frame):
 signal.signal(signal.SIGUSR1, debug)  # Register handler
 
 
-model = word2vec.KeyedVectors.load_word2vec_format("../GoogleNews-vectors-negative300.bin", binary=True)
+model = word2vec.KeyedVectors.load_word2vec_format("../swectors-300dim.vec", binary=False)
 
 print("loaded model...")
 
@@ -60,7 +60,7 @@ print("loaded alpha...")
 
 simple_word = re.compile("^[a-z]*")
 words = []
-for word in model.vocab:
+for word in model.key_to_index:
 #    if simple_word.match(word) and word in allowable_words:
     words.append(word)
 
