@@ -82,13 +82,40 @@ function share() {
     // We use the stored guesses here, because those are not updated again
     // once you win -- we don't want to include post-win guesses here.
     const text = solveStory(JSON.parse(storage.getItem("guesses")), puzzleNumber);
-    const copied = ClipboardJS.copy(text);
 
-    if (copied) {
-        alert("Kopierad till urklipp");
+    let copied = false;
+    try {
+        copied = ClipboardJS.copy(text);
+    } catch (err) {
+        console.log("Failed to copy to to clipboard", err);
     }
-    else {
-        alert("Kunde inte kopiera till urklipp");
+
+    const clipboardPrompt = () => {
+        if (copied) {
+            alert("Kopierad till urklipp");
+        } else {
+            alert("Kunde inte kopiera till urklipp");
+        }
+    };
+
+    const shareData = {
+        "title": "Swemantle",
+        "text": text,
+        "url": "https://swemantle.riddle.nu/",
+    }
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+        navigator.share(shareData)
+            .then(() => {
+                if (!copied) {
+                    alert("Kunde inte kopiera till urklipp");
+                }
+            })
+            .catch((error) => {
+                console.log('Error sharing', error)
+                clipboardPrompt();
+            });
+    } else {
+        clipboardPrompt();
     }
 }
 
