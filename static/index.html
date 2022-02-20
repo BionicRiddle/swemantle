@@ -3,11 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Semantle</title>
+    <title>Swemantle</title>
     <script src="assets/js/secretWords.js?2"></script>
     <script src="assets/js/semantle.js"></script>
     <script src="assets/js/clipboard.js"></script>
-    <script src="assets/js/british_spellings.js"></script>
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
@@ -30,7 +29,7 @@
     <p>
       Varje gissning måste vara ett ord (av valfri längd). Spelet kommer att berätta hur semantiskt likt ditt ord
       är till det hemliga ordet. Till skillnad från det andra ordspelet är det inte det
-      om stavningen; det handlar om meningen. Likhetsvärdet
+      om stavningen; det handlar om betydelsen. Likhetsvärdet
       kommer från Word2vec. Den högsta möjliga likheten är 100
       (vilket indikerar att ditt ord och det hemliga ordet är lika och att du har vunnit). Att ett ord är "semantiskt lik", betyder ungefär att det används i samband med
       liknande ord i t.ex. nyhetsartiklar.
@@ -39,28 +38,26 @@
       Det hemliga ord kan vara vilken del av en mening som helst, men kommer alltid att vara ett enstaka ord.
       Det är frestande att bara tänka på substantiv, eftersom det
       är hur vanliga semantiska ordgissningsspel fungerar. Men låt dig inte luras! Vår Word2vec-datauppsättning innehåller inte bara Substantiv, alla gissningar är skiftlägeskänsliga. Men alla möjliga hemliga ord består av små bokstäver,
-      Om du anger ett ord som "Nice" och det hemliga ordet är nice så kommer du få rätt och vinna ändå.
+      Om du anger ett ord som "Sten" och det hemliga ordet är sten så kommer du få rätt och vinna ändå.
     </p>
     <p>
-      The "Getting close" indicator tells you how close you are --if
-      your word is one of the 1,000 nearest normal words to the target
-      word, the rank will be given (1000 is the target word itself).
-      If your word is not one of the nearest 1000, you're "cold". (By
-      "normal" words", I mean non-capitalized words that appears in a
-      very large English word list; there are lots of capitalized,
-      misspelled, or obscure words that might be close but that won't
-      get a ranking.  Those get marked with "????").
+      "Nära?"-indikatorn berättar hur nära det hemliga ordet en gissning är. 
+      Om ditt ord är ett av de 1000 närmaste "normala" orden kommer en rank
+      för din gissning visas (1000 är det hemliga ordets rank). Om ditt ord
+      inte är bland de närmaste 1000 är du "kall". (Se <a href="https://semantle.novalis.org/">Semantle</a>
+      för en definition av "normala" ord, men det verkar inte som att Word2vec-datauppsättningen
+      vi använder ens innehåller stora bokstäver så ¯\_(ツ)_/¯. Räkna inte med att se några "????".)
     </p>
     <p>
-      You will need more than six guesses.  You will probably need
-      dozens of guesses. <b>There's a new word every day</b>, where
-      a day starts at midnight UTC <span id="localtime"></span>. <span id="yesterday"></span>
+      Du kommer behöva mer än sex gissningar. Du kommer nog behöva
+      dussintals gissningar. <b>Det finns ett nytt ord varje dag</b>,
+      där nya dagar börjar vid midnatt UTC <span id="localtime"></span>. <span id="yesterday"></span>
     </p>
     <p id="similarity-story"> </p>
     <div id="error" style="color:#ff0000"></div>
     <form id="form" autocorrect="off" autocapitalize="none"
           autocomplete="off">
-      <input type="checkbox" name="lower" value="lower" id="lower" /><label for="lower"><small>Treat all input as lowercase (see FAQ at bottom)</small></label><br/>
+      <input type="checkbox" name="lower" value="lower" id="lower" /><label for="lower"><small>Gör om mina gissninger till gemener automatiskt</small></label><br/>
     <br/>
     <input placeholder="Guess" autocorrect="off" autocapitalize="none"
            autocomplete="off"
@@ -84,108 +81,22 @@
     <br>
 
 <h3>FAQ</h3>
-
-    <p> Q: Why is the similarity so different from what I was expecting?</p>
-    <p> A: I can think of at least three reasons for this. </p>
-    <ol>
-      <li>Your guess, or the target word, is polysemous, and the
-        meaning that is similar is rarely used. This is why "leather"
-        is far from "patent."  Sometimes one usage is simply more
-        popular (among newspaper reporters, which is the corpus):
-        "display" is more often a verb than a noun, and its vector
-        reflects this.</li>
-      <li>You capitalized your word.  SmartKey and some other
-        keyboards stupidly ignore the autocapitalize settings that I
-        have explicitly set in the HTML, and there does not seem to
-        be anything I can do about this.  I added a checkbox to help
-        you avoid this.</li>
-      <li>Your word and the target word belong to different parts of
-        speech.  Sometimes this matters a lot.  Sometimes it matters
-        only a little.</li>
-    </ol>
-    <p> The data set is what it is -- it's not perfect, and I can't
-    afford enough computing power (or a big enough corpus) to try to
-    make a better one.  The technique has limitations.  Sometimes,
-    they'll bite you and you'l lose.</p>
-    <p> Q: Can I play more than once per day? </p>
-    <p> A: No.  There are three reasons for this:</p>
-      <ol>
-        <li>Slavish imitation of that other word guessing game.</li>
-        <li>A game designer I know found a site that let you play as much of the other game as you want.  He immediately binged, and then got bored, and hasn't tweeted about it since.</li>
-        <li>Another friend of mine said that she considered giving up on one day's Semantle, and then realized it would be another 24 hours before she could try again.  So she persevered and got it.</li>
-      </ol>
-
-    <p> Q: How did you come up with this?</p>
     <p>
-      A:
-      <a href="http://www.topped-with-meat.com/connector/frenchtoast.html">Prior
-      art</a>. I discovered French Toast about 20 years ago, and
-      immediately knew that I had to
-      tell <a href="https://blog.plover.com/">Dominus</a> about it.
-      He replied that in fact he
-      and <a href="https://moonmilk.com/">Ranjit</a> had invented it
-      ten or so years before that, and called it "Plenty Questions".
-      Also, <a href="https://www.datcreativity.com/task">the Divergent
-      Association Task</a> is the opposite of Semantle.
+        Se <a href="">Semantles</a> FAQ för fler frågor och svar.
     </p>
-    <p>
-      But I wasn't thinking of French Toast when I invented this.
-      Instead, I was thinking
-      about <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a>
-      and <a href="https://worldle.teuteuf.fr/">Worldle</a> and about
-      the dimensionality of data sets.  I considered Filmle, a movie
-      guessing game: You say "The Matrix", it says "Keanu Reeves has a
-      bacon number of 3 where bacon is the lead actor in the target
-      film." (and so on for Carrie-Ann Moss, Laurence Fishburne, and
-      Hugo Weaving for actors at corresponding billings).  But I don't
-      care about movies.  Too bad,
-      because <a href="https://www.imdb.com/interfaces/">IMDB</a>
-      actually has exactly the data that you would need to implement
-      it in a really easy form.  Then I remembered word2vec, and here
-      we are.
-    </p>
-    <p> Q: How does this work? </p>
-    <p> A: <a href="https://towardsdatascience.com/word2vec-explained-49c52b4ccb71">Here's an article on word2vec, the underlying technology</a>.
-    <p> Q: What data set did you use? </p>
-    <p> A: <tt>GoogleNews-vectors-negative300.bin</tt> from late 2021</p>
-    <p> Q: Can I see yesterday's word?  </p>
-    <p> A: Yes, "<span id="yesterday2"></span>". </p>
-    <p> Q: What words were closest to yesterday's word? </p>
+
+    <p> Q: Vilket dataset används? </p>
+    <p> A: <a href="https://www.ida.liu.se/divisions/hcs/nlplab/swectors/"><tt>swectors-300dim.txt</tt></a> (2016-07-16)</p>
+    <p> Q: Kan jag se gårdagens ord?  </p>
+    <p> A: Ja: "<span id="yesterday2"></span>". </p>
+    <p> Q: Vilka ord var närmast gårdagens ord? </p>
     <p> A: <span id="nearbyYesterday"></span>
-    <p> Q: Source code? </p>
-    <p> A: <a href="https://gitlab.com/novalis_dt/semantle">Yes!</a></p>
-    <p> Q: What about the words "and" or "of"?</p>
-    <p> A: No clue why the data set doesn't include them.  Perhaps
-      they were just warping the scores of everything else, since they
-      are used in so many different contexts?</p>
-    <p> Q: What about UK spelling?</p>
-    <p> A: The data seems to be normalized to US spelling.  Semantle
-      tries to automatically Americanize your spelling (in the cases
-      where only the American version is in the data set). Of course,
-      they probably couldn't normalize some words, like 'biscuit',
-      'lift', or 'pants', so for those you're on your own.</p>
-    <p> Q: Can I sort my guesses chronologically?</p>
-    <p> A: Yes: click on the "#" column header.  Click it again to go
-    reverse-chronological.  It will revert to similarity order when
-    you enter a guess (or when you click the "Similarity" column
-    header).
-    </p>
-    <p> Q: Why do the nearby word ranks go up instead of down? </p>
-    <p> A: I was caught between a rock and a hard place here: on one
-      hand, ranks are usually descending, but on the other hand, here,
-      the similarities are ascending. I chose what I thought was the
-      least bad option, but I don't think I would have been happy
-      either way. </p>
-    <p> Q: How does my performance compare to others?</p>
-    <p> A: I don't keep statistics on this. But you are welcome to
-    brag on Twitter, or
-    on <a href="https://www.reddit.com/r/semantle">the
-    subreddit</a>.</p>
-    <p> Q: Can I email you to complain about how words are scored? </p>
-    <p> A: I will ignore those emails.  (Sorry, but I do have a day
-    job, and it's acually more fun than answering complaint emails).</p>
+    <p> Q: Källkod? </p>
+    <p> A: <a href="https://github.com/BionicRiddle/swemantle">Visst!</a> (väldigt baserad på <a href="https://gitlab.com/novalis_dt/semantle">Semantle</a>)</p>
 
+    <p> Q: Kan jag maila dig med klagomål? </p>
+    <p> A: Haha, nej </p>
 
-    <div>Made by <a href="mailto:novalis@novalis.org">David Turner</a>.  Word2vec data from Google.</div>
+    <div>Swemantle är en svensk klon av <a href="mailto:novalis@novalis.org">David Turner</a>s <a href="https://semantle.novalis.org/">Semantle</a> med Word2vec-data från <a href="https://www.ida.liu.se/divisions/hcs/nlplab/swectors/">LiU</a>.</div>
   </body>
 </html>

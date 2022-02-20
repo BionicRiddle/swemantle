@@ -126,7 +126,7 @@ function guessRow(similarity, oldGuess, percentile, guessNumber, guess) {
     let progress = "";
     let cls = "";
     if (similarity >= similarityStory.rest * 100) {
-        percentileText = '<span class="weirdWord">????<span class="tooltiptext">Ovanlig stavning hittad! Detta ord finns inte i listan över &quot;normala&quot; ord som används i top-1000 list, men det är likt! (Testa en alternativ stavning?)</span></span>';
+        percentileText = '<span class="weirdWord">????<span class="tooltiptext">Ovanlig stavning hittad! Detta ord finns inte i listan över &quot;vanliga&quot; ord som används i top-1000 list, men det är likt! (Testa en alternativ stavning?)</span></span>';
     }
     if (percentile) {
         if (percentile == 1000) {
@@ -168,7 +168,7 @@ function solveStory(guesses, puzzleNumber) {
     }
 
     let describe = function(similarity, percentile) {
-        let out = `hade en likhet  ${similarity.toFixed(2)}`;
+        let out = `hade en likhet på ${similarity.toFixed(2)}`;
         if (percentile) {
             out += ` (${percentile}/1000)`;
         }
@@ -179,7 +179,7 @@ function solveStory(guesses, puzzleNumber) {
     guesses_chrono.sort(function(a, b){return a[3]-b[3]});
 
     let [similarity, old_guess, percentile, guess_number] = guesses_chrono[0];
-    let first_guess = `Min första gissning: ${describe(similarity, percentile)}.`;
+    let first_guess = `Min första gissning: ${describe(similarity, percentile)}. `;
     let first_guess_in_top = !!percentile;
 
     let first_hit = '';
@@ -187,7 +187,7 @@ function solveStory(guesses, puzzleNumber) {
         for (let entry of guesses_chrono) {
             [similarity, old_guess, percentile, guess_number] = entry;
             if (percentile) {
-                first_hit = `  Mitt första ord i topp 1000 var gissning nummer #${guess_number}.  `;
+                first_hit = `Mitt första ord i topp 1000 var gissning nummer ${guess_number}. `;
                 break;
             }
         }
@@ -195,7 +195,7 @@ function solveStory(guesses, puzzleNumber) {
 
     const penultimate_guess = guesses_chrono[guesses_chrono.length - 2];
     [similarity, old_guess, percentile, guess_number] = penultimate_guess;
-    const penultimate_guess_msg = `Min näst sista gissning: ${describe(similarity, percentile)}.`;
+    const penultimate_guess_msg = `Min näst sista gissning: ${describe(similarity, percentile)}. `;
 
     return `Jag löste Swemantle #${puzzleNumber} på ${guess_count} gissningar. ${first_guess}${first_hit}${penultimate_guess_msg} https://swemantle.riddle.nu/`;
 }
