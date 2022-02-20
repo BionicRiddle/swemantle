@@ -52,9 +52,6 @@ def similarity(a, b):
 print("loaded moby...")
 
 allowable_words = set()
-with open("words_alpha.txt") as walpha:
-    for line in walpha.readlines():
-        allowable_words.add(line.strip())
 
 print("loaded alpha...")
 
@@ -65,7 +62,7 @@ for word in model.key_to_index:
     words.append(word)
 
 hints = {}
-with open("static/assets/js/secretWords.js") as f:
+with open("static/assets/js/secretWords.js", encoding="utf-8") as f:
     for line in f.readlines():
         line = line.strip()
         if not line.startswith('"'):
