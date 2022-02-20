@@ -1,5 +1,3 @@
-import logging
-from logging.handlers import RotatingFileHandler
 from flask import Flask, request, jsonify, send_file, send_from_directory, render_template
 import struct
 import sqlite3
@@ -8,11 +6,6 @@ from time import strftime
 
 def create_app():
     app = Flask(__name__)
-
-    handler = RotatingFileHandler('app.log', maxBytes=100000, backupCount=3)
-    logger = logging.getLogger('tdm')
-    logger.setLevel(logging.ERROR)
-    logger.addHandler(handler)
 
     @app.route('/')
     def send_index():
@@ -121,7 +114,7 @@ def create_app():
     @app.after_request
     def after_request(response):
         timestamp = strftime('[%Y-%b-%d %H:%M]')
-        logger.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+        print(f"{timestamp} {request.remote_addr} {request.method} {request.scheme} {request.full_path} {response.status}")
         return response
 
     @app.errorhandler(404)
