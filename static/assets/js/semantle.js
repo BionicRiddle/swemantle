@@ -122,7 +122,7 @@ function select(word, secretVec) {
 }
 
 function guessRow(similarity, oldGuess, percentile, guessNumber, guess) {
-    let percentileText = "(cold)";
+    let percentileText = "(kall)";
     let progress = "";
     let cls = "";
     if (similarity >= similarityStory.rest * 100) {
@@ -130,7 +130,7 @@ function guessRow(similarity, oldGuess, percentile, guessNumber, guess) {
     }
     if (percentile) {
         if (percentile == 1000) {
-            percentileText = "FOUND!";
+            percentileText = "HITTAT!";
         } else {
             cls = "close";
             percentileText = `<span style="text-align:right; width:5em; display:inline-block;">${percentile}/1000</span>&nbsp;`;
