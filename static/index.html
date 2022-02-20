@@ -37,16 +37,13 @@
     <p>
       Det hemliga ord kan vara vilken del av en mening som helst, men kommer alltid att vara ett enstaka ord.
       Det är frestande att bara tänka på substantiv, eftersom det
-      är hur vanliga semantiska ordgissningsspel fungerar. Men låt dig inte luras! Vår Word2vec-datauppsättning innehåller inte bara Substantiv, alla gissningar är skiftlägeskänsliga. Men alla möjliga hemliga ord består av små bokstäver,
-      Om du anger ett ord som "Sten" och det hemliga ordet är sten så kommer du få rätt och vinna ändå.
+      är hur vanliga semantiska ordgissningsspel fungerar. Men låt dig inte luras! Vår Word2vec-datauppsättning innehåller inte bara Substantiv, gissningar är inte skiftlägeskänsliga.
     </p>
     <p>
       "Nära?"-indikatorn berättar hur nära det hemliga ordet en gissning är. 
-      Om ditt ord är ett av de 1000 närmaste "normala" orden kommer en rank
+      Om ditt ord är ett av de 1000 närmaste orden kommer en rank
       för din gissning visas (1000 är det hemliga ordets rank). Om ditt ord
-      inte är bland de närmaste 1000 är du "kall". (Se <a href="https://semantle.novalis.org/">Semantle</a>
-      för en definition av "normala" ord, men det verkar inte som att Word2vec-datauppsättningen
-      vi använder ens innehåller stora bokstäver så ¯\_(ツ)_/¯. Räkna inte med att se några "????".)
+      inte är bland de närmaste 1000 är du "kall".
     </p>
     <p>
       Du kommer behöva mer än sex gissningar. Du kommer nog behöva
