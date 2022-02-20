@@ -154,7 +154,7 @@ function updateLocalTime() {
     const now = new Date();
     now.setUTCHours(24, 0, 0, 0);
 
-    $('#localtime').innerHTML = `or ${now.getHours()}:00 din tid`;
+    $('#localtime').innerHTML = `eller ${now.getHours()}:00 din tid`;
 }
 
 function solveStory(guesses, puzzleNumber) {
