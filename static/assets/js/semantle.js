@@ -21,8 +21,6 @@ const initialDay = 19042;
 const puzzleNumber = (today - initialDay) % secretWords.length;
 const yesterdayPuzzleNumber = (today - initialDay + secretWords.length - 1) % secretWords.length;
 const storage = window.localStorage;
-let caps = 0;
-let warnedCaps = 0;
 let chrono_forward = 1;
 
 function $(id) {
@@ -287,17 +285,8 @@ likhet på ${(similarityStory.rest * 100).toFixed(2)}.
             if (!guess) {
                 return false;
             }
-            if ($("#lower").checked) {
-                guess = guess.toLowerCase();
-            }
 
-            if (guess[0].toLowerCase() != guess[0]) {
-                caps += 1;
-            }
-            if (caps >= 2 && (caps / guesses.length) > 0.4 && !warnedCaps) {
-                warnedCaps = true;
-                $("#lower").checked = confirm("Många av orden du fyller i börjar med stor bokstav. Det var nog inte din avsikt utan troligtvis ignorerar tangentbordet i din telefon inställningen för automomatiska versaler. \"Sten\" är ett namn. \"sten\" är ett litet berg. Vill du att alla gissningar ska göras om till gemener automatiskt?");
-            }
+            guess = guess.toLowerCase();
 
             $('#guess').value = "";
 
