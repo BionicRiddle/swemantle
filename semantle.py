@@ -93,7 +93,7 @@ def create_app():
     @app.route('/nearby_1k/<string:word_b64>')
     def nearby_1k(word_b64):
         try:
-            word = base64.b64decode(word_b64.encode('ascii')).decode('ascii')
+            word = base64.b64decode(word_b64.encode('iso-8859-1')).decode('iso-8859-1')
 
             con = sqlite3.connect('word2vec.db')
             cur = con.cursor()
