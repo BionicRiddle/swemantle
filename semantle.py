@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, send_file, send_from_directory, rende
 import struct
 import sqlite3
 import base64
-from time import strftime
 
 def create_app():
     app = Flask(__name__)
@@ -110,12 +109,6 @@ def create_app():
             import traceback
             traceback.print_exc()
             return "Oops, error"
-
-    @app.after_request
-    def after_request(response):
-        timestamp = strftime('[%Y-%b-%d %H:%M]')
-        print(f"{timestamp} {request.remote_addr} {request.method} {request.scheme} {request.full_path} {response.status}")
-        return response
 
     @app.errorhandler(404)
     def not_found(error):
