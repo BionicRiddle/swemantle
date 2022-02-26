@@ -38,7 +38,7 @@ def similarity(v1, v2):
     return abs(sum(a * b for a, b in zip(v1, v2)) / (mag(v1)*mag(v2)))
 
 def similarity(a, b):
-    return abs(dot(a, b)/(norm(a)*norm(b)))
+    return dot(a, b) / (norm(a) * norm(b))
 
 # synonyms = {}
 
