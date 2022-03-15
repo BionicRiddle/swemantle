@@ -69,15 +69,11 @@ def find_hints(secret, progress=True):
 
     #        syns = synonyms.get(secret) or []
     nearest = []
+    reg = re.compile(".*\d.*")
 
     for word in worditer:
-        #            if word in syns:
-        #                continue
-        #            if secret in (synonyms.get(word) or []):
-        #                # yow, asymmetrical!
-        #                continue
-        #            if word in secret or secret in word:
-        #                continue
+        if reg.match(word):
+            continue
         vec = model[word]
         # why not model.wv.similarity(wordA, wordB)?
         similarity = dot(vec, target_vec) / (norm(vec) * target_vec_norm)
