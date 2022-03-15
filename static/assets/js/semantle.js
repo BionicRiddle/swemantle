@@ -18,9 +18,9 @@ let guessCount = 0;
 let model = null;
 const now = Date.now();
 const today = Math.floor(now / 86400000);
-const initialDay = 19021;
+const initialDay = 19042;
 const puzzleNumber = (today - initialDay) % secretWords.length;
-const handleStats = puzzleNumber >= 24;
+const handleStats = puzzleNumber > 20; // 25
 const yesterdayPuzzleNumber = (today - initialDay + secretWords.length - 1) % secretWords.length;
 const storage = window.localStorage;
 let caps = 0;
@@ -87,13 +87,40 @@ function share() {
     // We use the stored guesses here, because those are not updated again
     // once you win -- we don't want to include post-win guesses here.
     const text = solveStory(JSON.parse(storage.getItem("guesses")), puzzleNumber);
-    const copied = ClipboardJS.copy(text);
 
-    if (copied) {
-        alert("Copied to clipboard");
+    let copied = false;
+    try {
+        copied = ClipboardJS.copy(text + " https://swemantle.riddle.nu/");
+    } catch (err) {
+        console.log("Failed to copy to to clipboard", err);
     }
-    else {
-        alert("Failed to copy to clipboard");
+
+    const clipboardPrompt = () => {
+        if (copied) {
+            alert("Kopierad till urklipp");
+        } else {
+            alert("Kunde inte kopiera till urklipp");
+        }
+    };
+
+    const shareData = {
+        "title": "Swemantle",
+        "text": text,
+        "url": "https://swemantle.riddle.nu/",
+    }
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+        navigator.share(shareData)
+            .then(() => {
+                if (!copied) {
+                    alert("Kunde inte kopiera till urklipp");
+                }
+            })
+            .catch((error) => {
+                console.log('Error sharing', error)
+                clipboardPrompt();
+            });
+    } else {
+        clipboardPrompt();
     }
 }
 
@@ -125,15 +152,15 @@ function select(word, secretVec) {
 }
 
 function guessRow(similarity, oldGuess, percentile, guessNumber, guess) {
-    let percentileText = "(cold)";
+    let percentileText = "(kall)";
     let progress = "";
     let cls = "";
     if (similarity >= similarityStory.rest * 100) {
-        percentileText = '<span class="weirdWord">????<span class="tooltiptext">Unusual word found!  This word is not in the list of &quot;normal&quot; words that we use for the top-1000 list, but it is still similar! (Is it maybe capitalized?)</span></span>';
+        percentileText = '<span class="weirdWord">????<span class="tooltiptext">Ovanlig stavning hittad! Detta ord finns inte i listan över &quot;vanliga&quot; ord som används i top-1000 list, men det är likt! (Testa en alternativ stavning?)</span></span>';
     }
     if (percentile) {
         if (percentile == 1000) {
-            percentileText = "FOUND!";
+            percentileText = "HITTAT!";
         } else {
             cls = "close";
             percentileText = `<span class="percentile">${percentile}/1000</span>&nbsp;`;
@@ -166,21 +193,21 @@ function updateLocalTime() {
     const now = new Date();
     now.setUTCHours(24, 0, 0, 0);
 
-    $('#localtime').innerHTML = `or ${now.getHours()}:00 your time`;
+    $('#localtime').innerHTML = `eller ${now.getHours()}:00 din tid`;
 }
 
 function solveStory(guesses, puzzleNumber) {
     const guess_count = guesses.length;
     if (guess_count == 0) {
-        return `I gave up on Semantle ${puzzleNumber} without even guessing once.`;
+        return `Jag gav upp på Swemantle #${puzzleNumber} utan att ens gissa en gång.`;
     }
 
     if (guess_count == 1) {
-        return `I got Semantle ${puzzleNumber} on my first guess!`;
+        return `Jag löste Swemantle #${puzzleNumber} på min första gissning!`;
     }
 
     let describe = function(similarity, percentile) {
-        let out = `had a similarity of ${similarity.toFixed(2)}`;
+        let out = `hade en likhet på ${similarity.toFixed(2)}`;
         if (percentile) {
             out += ` (${percentile}/1000)`;
         }
@@ -191,7 +218,7 @@ function solveStory(guesses, puzzleNumber) {
     guesses_chrono.sort(function(a, b){return a[3]-b[3]});
 
     let [similarity, old_guess, percentile, guess_number] = guesses_chrono[0];
-    let first_guess = `My first guess ${describe(similarity, percentile)}.`;
+    let first_guess = ` Min första gissning ${describe(similarity, percentile)}.`;
     let first_guess_in_top = !!percentile;
 
     let first_hit = '';
@@ -199,7 +226,7 @@ function solveStory(guesses, puzzleNumber) {
         for (let entry of guesses_chrono) {
             [similarity, old_guess, percentile, guess_number] = entry;
             if (percentile) {
-                first_hit = `  My first word in the top 1000 was at guess #${guess_number}.  `;
+                first_hit = ` Mitt första ord i topp 1000 var gissning nummer ${guess_number}.`;
                 break;
             }
         }
@@ -207,9 +234,9 @@ function solveStory(guesses, puzzleNumber) {
 
     const penultimate_guess = guesses_chrono[guesses_chrono.length - 2];
     [similarity, old_guess, percentile, guess_number] = penultimate_guess;
-    const penultimate_guess_msg = `My penultimate guess ${describe(similarity, percentile)}.`;
+    const penultimate_guess_msg = ` Min näst sista gissning ${describe(similarity, percentile)}.`;
 
-    return `I solved Semantle #${puzzleNumber} in ${guess_count} guesses. ${first_guess}${first_hit}${penultimate_guess_msg} https://semantle.novalis.org/`;
+    return `Jag löste Swemantle #${puzzleNumber} på ${guess_count} gissningar.${first_guess}${first_hit}${penultimate_guess_msg}`;
 }
 
 let Semantle = (function() {
@@ -250,31 +277,25 @@ let Semantle = (function() {
         secret = secretWords[puzzleNumber].toLowerCase();
         const yesterday = secretWords[yesterdayPuzzleNumber].toLowerCase();
 
-        $('#yesterday').innerHTML = `Yesterday's word was <b>"${yesterday}"</b>.`;
+        $('#yesterday').innerHTML = `Gårdagens ord var <b>"${yesterday}"</b>.`;
         $('#yesterday2').innerHTML = yesterday;
-
-        $('#lower').checked = storage.getItem("lower") == "true";
-
-        $('#lower').onchange = (e) => {
-            storage.setItem("lower", "" + $('#lower').checked);
-        };
 
         try {
             const yesterdayNearby = await getNearby(yesterday);
-            const secretBase64 = btoa(unescape(encodeURIComponent(yesterday)));
-            $('#nearbyYesterday').innerHTML = `${yesterdayNearby.join(", ")}, in descending order of closensess. <a href="nearby_1k/${secretBase64}">More?</a>`;
+            const secretBase64 = btoa(yesterday);
+            $('#nearbyYesterday').innerHTML = `${yesterdayNearby.join(", ")}, i fallande ordning efter närhet. <a href="nearby_1k/${secretBase64}">Fler?</a>`;
         } catch (e) {
-            $('#nearbyYesterday').innerHTML = `Coming soon!`;
+            $('#nearbyYesterday').innerHTML = `Kommer snart!`;
         }
         updateLocalTime();
 
         try {
             similarityStory = await getSimilarityStory(secret);
             $('#similarity-story').innerHTML = `
-Today is puzzle number <b>${puzzleNumber}</b>. The nearest word has a similarity of
-<b>${(similarityStory.top * 100).toFixed(2)}</b>, the tenth-nearest has a similarity of
-${(similarityStory.top10 * 100).toFixed(2)} and the one thousandth nearest word has a
-similarity of ${(similarityStory.rest * 100).toFixed(2)}.
+Dagens kluring är nummer <b>${puzzleNumber}</b>. Det närmaste ordet har en likhet på
+<b>${(similarityStory.top * 100).toFixed(2)}</b>, det tionde närmaste ordet har en likhet på
+${(similarityStory.top10 * 100).toFixed(2)} och det tusende närmaste ordet har en
+likhet på ${(similarityStory.rest * 100).toFixed(2)}.
 `;
         } catch {
             // we can live without this in the event that something is broken
@@ -329,7 +350,7 @@ similarity of ${(similarityStory.rest * 100).toFixed(2)}.
 
         $('#give-up-btn').addEventListener('click', function(event) {
             if (!gameOver) {
-                if (confirm("Are you sure you want to give up?")) {
+                if (confirm("Är du säker på att du vill ge upp?")) {
                     endGame(false, true);
                 }
             }
@@ -346,28 +367,13 @@ similarity of ${(similarityStory.rest * 100).toFixed(2)}.
             if (!guess) {
                 return false;
             }
-            if ($("#lower").checked) {
-                guess = guess.toLowerCase();
-            }
-
-            if (typeof unbritish !== 'undefined' && unbritish.hasOwnProperty(guess)) {
-                guess = unbritish[guess];
-            }
-
-            if (guess[0].toLowerCase() != guess[0]) {
-                caps += 1;
-            }
-            if (caps >= 2 && (caps / guesses.length) > 0.4 && !warnedCaps) {
-                warnedCaps = true;
-                $("#lower").checked = confirm("You're entering a lot of words with initial capital letters.  This is probably not what you want to do, and it's probably caused by your phone keyboard ignoring the autocapitalize setting.  \"Nice\" is a city. \"nice\" is an adjective.  Do you want me to downcase your guesses for you?");
-                storage.setItem("lower", "true");
-            }
+            guess = guess.toLowerCase();
 
             $('#guess').value = "";
 
             const guessData = await getModel(guess);
             if (!guessData) {
-                $('#error').textContent = `I don't know the word ${guess}.`;
+                $('#error').textContent = `Jag känner inte till ordet ${guess}.`;
                 return false;
             }
 
@@ -440,7 +446,7 @@ similarity of ${(similarityStory.rest * 100).toFixed(2)}.
     }
 
     function updateGuesses() {
-        let inner = `<tr><th id="chronoOrder">#</th><th id="alphaOrder">Guess</th><th id="similarityOrder">Similarity</th><th>Getting close?</th></tr>`;
+        let inner = `<tr><th id="chronoOrder">#</th><th id="alphaOrder">Gissning</th><th id="similarityOrder">Likhet</th><th>Nära?</th></tr>`;
         /* This is dumb: first we find the most-recent word, and put
            it at the top.  Then we do the rest. */
         for (let entry of guesses) {
@@ -568,30 +574,31 @@ similarity of ${(similarityStory.rest * 100).toFixed(2)}.
         $('#give-up-btn').style = "display:none;";
         $('#response').classList.add("gaveup");
         gameOver = true;
-        const secretBase64 = btoa(unescape(encodeURIComponent(secret)));
+        const secretBase64 = btoa(secret);
         let response;
         if (won) {
-            response = `<p><b>You found it in ${guesses.length}!  The secret word is ${secret}</b>.  Feel free to keep entering words if you are curious about the similarity to other words. <a href="javascript:share();">Share</a> and play again tomorrow.  You can see the nearest words <a href="nearby_1k/${secretBase64}">here</a>.</p>`
+            response = `<b>Du hittade det på ${guessCount} försök! Det hemliga ordet är ${secret}</b>. Fortsätt gärna att testa ord om du är nyfiken på deras likhet med det hemliga ordet. <a href="javascript:share();">Dela</a> och spela igen imorgon. Du kan se de närmaste orden <a href="nearby_1k/${secretBase64}">här</a>.`
         } else {
-            response = `<p><b>You gave up!  The secret word is: ${secret}</b>.  Feel free to keep entering words if you are curious about the similarity to other words.  You can see the nearest words <a href="nearby_1k/${secretBase64}">here</a>.</p>`;
+            response = `<b>Du gav upp! Det hemliga ordet är ${secret}</b>. Fortsätt gärna att testa ord om du är nyfiken på deras likhet med det hemliga ordet. Du kan se de närmaste orden <a href="nearby_1k/${secretBase64}">här</a>.`;
         }
 
         if (handleStats) {
             const totalGames = stats['wins'] + stats['giveups'] + stats['abandons'];
             response += `<br/>
-Stats (since we started recording, on day 23): <br/>
+Statistik (vi började med statestik dag, on day 25): <br/>
 <table>
-<tr><th>First game:</th><td>${stats['firstPlay']}</td></tr>
-<tr><th>Total days played:</th><td>${totalGames}</td></tr>
-<tr><th>Wins:</th><td>${stats['wins']}</td></tr>
-<tr><th>Win streak:</th><td>${stats['winStreak']}</td></tr>
-<tr><th>Give-ups:</th><td>${stats['giveups']}</td></tr>
-<tr><th>Did not finish:</th><td>${stats['abandons']}</td></tr>
-<tr><th>Total guesses across all games:</th><td>${stats['totalGuesses']}</td></tr>
-<tr><th>Average guesses across all games:</th><td>${(stats['totalGuesses'] / totalGames).toFixed(2)}</td></tr>
+<tr><th>Första dagen:</th><td>${stats['firstPlay']}</td></tr>
+<tr><th>Totalt antal dagar spelade:</th><td>${totalGames}</td></tr>
+<tr><th>Vinster:</th><td>${stats['wins']}</td></tr>
+<tr><th>Vinster i rad:</th><td>${stats['winStreak']}</td></tr>
+<tr><th>Antalet dagar som getts upp:</th><td>${stats['giveups']}</td></tr>
+<tr><th>Antalet ej avklarade dagar:</th><td>${stats['abandons']}</td></tr>
+<tr><th>Totalt antal gissningar över alla dagar:</th><td>${stats['totalGuesses']}</td></tr>
+<tr><th>Antalet gissningar i genomsnitt:</th><td>${(stats['totalGuesses'] / totalGames).toFixed(2)}</td></tr>
 </table>
 `;
         }
+
         $('#response').innerHTML = response;
 
         if (countStats) {

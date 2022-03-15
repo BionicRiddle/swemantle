@@ -4,3 +4,9 @@ word2vec.db-wal
 nearest.pickle
 static/assets/js/british_spellings.js
 .DS_Store
+app.log
+__pycache__/
+*.py[cod]
+*$py.class
+*.py[cod]
+*$py.class

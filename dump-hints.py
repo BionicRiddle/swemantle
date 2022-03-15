@@ -27,35 +27,12 @@ import code, traceback, signal
 ALL_WORDS = False
 
 
-model = word2vec.KeyedVectors.load_word2vec_format(
-    "../GoogleNews-vectors-negative300.bin", binary=True
-)
-
+model = word2vec.KeyedVectors.load_word2vec_format("../swectors-300dim.vec", binary=False)
 
 def make_words():
-    allowable_words = set()
-    with open("words_alpha.txt") as walpha:
-        for line in walpha.readlines():
-            allowable_words.add(line.strip())
-
-    print("loaded alpha...")
-
-    # The banned words are stored obfuscated because I do not want a giant
-    # list of banned words to show up in my repository.
-    banned_hashes = set()
-    with open("banned.txt") as f:
-        for line in f:
-            banned_hashes.add(line.strip())
-
-    simple_word = re.compile("^[a-z]*$")
     words = []
     for word in model.key_to_index:
-        if ALL_WORDS or (simple_word.match(word) and word in allowable_words):
-            h = sha1()
-            h.update(("banned" + word).encode("ascii"))
-            hash = h.hexdigest()
-            if not hash in banned_hashes:
-                words.append(word)
+        words.append(word)
 
     return words
 
@@ -123,7 +100,7 @@ if __name__ == "__main__":
 
     secrets = []  # to have length for progress bar
 
-    with open("static/assets/js/secretWords.js") as f:
+    with open("static/assets/js/secretWords.js", encoding="utf-8") as f:
         for line in f.readlines():
             line = line.strip()
             if not '"' in line:

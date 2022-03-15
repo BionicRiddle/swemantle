@@ -6,7 +6,7 @@ function $(id) {
 function init() {
     const now = Date.now();
     const today = Math.floor(now / 86400000);
-    const initialDay = 19021;
+    const initialDay = 19042;
     const puzzleNumber = (today - initialDay) % secretWords.length;
     const secret = secretWords[puzzleNumber].toLowerCase();
 

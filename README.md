@@ -11,9 +11,6 @@ code is a mess.  Here's a hello world of how to get up and running.
 
 5. Run `python store-hints.py` to import the pickle into the DB.
 
-6. Run `python british.py` to figure out which British words have been respelled in word2vec, so that we can respell them for users. They
-come from [here](https://github.com/hyperreality/American-British-English-Translator).
-
 7. Run `python semantle.py` for the web server.
 
 Formatting

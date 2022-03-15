@@ -5,22 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/assets/js/secretWords.js"></script>
     <script src="/assets/js/nearest1k.js"></script>
-    <title>Semantle: nearest words</title>
+    <title>Swemantle: närmaste orden</title>
   </head>
   <body>
     <div id="warning" style="display:none; ">
       <div style="border:thin solid black; background-color: #ffdddd">
-        Warning: This will spoil today's Semantle puzzle!  Click this
-        warning to see the contents of this page anyway.
+        VARNING: Detta kommer att avslöja dagens Swemantle-ord! Klicka här för att se innehållet på denna sidan ändå.
       </div>
     </div>
     <div id="nearest" style="display:none;">
-      The nearest words to <b id="word">{{word}}</b> are:
+      Närmaste orden till <b id="word">{{word}}</b> är:
       <table >
         <tr>
-          <th>Closeness (higher is closer)</th>
-          <th>Word</th>
-          <th>Similarity</th>
+          <th>Närhet (högre är närmre)</th>
+          <th>Ord</th>
+          <th>Likhet</th>
         </tr>
         {% for word in words %}
         <tr>
@@ -33,6 +32,6 @@
     </div>
 
     <br/>
-    <a href="/">Back to Semantle</a>
+    <a href="/">Tillbaka till Swemantle</a>
   </body>
 </html>
