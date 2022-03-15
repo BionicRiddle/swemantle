@@ -585,7 +585,7 @@ likhet på ${(similarityStory.rest * 100).toFixed(2)}.
         if (handleStats) {
             const totalGames = stats['wins'] + stats['giveups'] + stats['abandons'];
             response += `<br/>
-Statistik (vi började med statistik dag, på dag 24): <br/>
+Statistik (vi började med statistik på dag 24): <br/>
 <table>
 <tr><th>Första dagen:</th><td>${stats['firstPlay']}</td></tr>
 <tr><th>Totalt antal dagar spelade:</th><td>${totalGames}</td></tr>
