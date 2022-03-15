@@ -27,7 +27,10 @@ import code, traceback, signal
 ALL_WORDS = False
 
 
-model = word2vec.KeyedVectors.load_word2vec_format("../swectors-300dim.vec", binary=False)
+model = word2vec.KeyedVectors.load_word2vec_format(
+    "../swectors-300dim.vec", binary=False
+)
+
 
 def make_words():
     words = []
@@ -51,6 +54,7 @@ def debug(sig, frame):
     message = "Signal received : entering python shell.\nTraceback:\n"
     message += "".join(traceback.format_stack(frame))
     i.interact(message)
+
 
 def find_hints(secret, progress=True):
     if progress:  # works poorly in parellel

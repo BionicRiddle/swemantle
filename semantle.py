@@ -11,33 +11,32 @@ import sqlite3
 import base64
 from time import strftime
 
+
 def create_app():
     app = Flask(__name__)
-    app.config['JSON_AS_ASCII'] = False
+    app.config["JSON_AS_ASCII"] = False
 
     @app.route("/")
     def send_index():
         return send_file("static/index.html")
 
-
     @app.route("/favicon.ico")
     def send_favicon():
         return send_file("static/assets/favicon.ico")
 
-
     @app.route("/assets/<path:path>")
     def send_static(path):
         return send_from_directory("static/assets", path)
-
 
     def expand_bfloat(vec, half_length=600):
         """
         expand truncated float32 to float32
         """
         if len(vec) == half_length:
-            vec = b"".join((b"\00\00" + bytes(pair)) for pair in zip(vec[::2], vec[1::2]))
+            vec = b"".join(
+                (b"\00\00" + bytes(pair)) for pair in zip(vec[::2], vec[1::2])
+            )
         return vec
-
 
     @app.route("/model/<string:word>")
     def word(word):
@@ -50,11 +49,10 @@ def create_app():
             if not res:
                 return ""
             res = res[0]
-            return jsonify(list(struct.unpack('300f', res)))
+            return jsonify(list(struct.unpack("300f", res)))
         except Exception as e:
             print(e)
             return jsonify(e)
-
 
     @app.route("/model2/<string:secret>/<string:word>")
     def model2(secret, word):
@@ -72,14 +70,13 @@ def create_app():
             if not row:
                 return ""
             vec = row[0]
-            result = { 'vec' : list(struct.unpack('300f', vec)) }
+            result = {"vec": list(struct.unpack("300f", vec))}
             if row[1]:
                 result["percentile"] = row[1]
             return jsonify(result)
         except Exception as e:
             print(e)
             return jsonify(e)
-
 
     @app.route("/similarity/<string:word>")
     def similarity(word):
@@ -97,7 +94,6 @@ def create_app():
         except Exception as e:
             print(e)
             return jsonify(e)
-
 
     @app.route("/nearby/<string:word>")
     def nearby(word):
@@ -117,11 +113,10 @@ def create_app():
             print(e)
             return jsonify(e)
 
-
     @app.route("/nearby_1k/<string:word_b64>")
     def nearby_1k(word_b64):
         try:
-            word = base64.b64decode(word_b64.encode('iso-8859-1')).decode('iso-8859-1')
+            word = base64.b64decode(word_b64.encode("iso-8859-1")).decode("iso-8859-1")
             print(word)
             con = sqlite3.connect("word2vec.db")
             cur = con.cursor()
@@ -147,22 +142,21 @@ def create_app():
             traceback.print_exc()
             return "Oops, error"
 
-
     @app.errorhandler(404)
     def not_found(error):
         return "page not found"
-
 
     @app.errorhandler(500)
     def error_handler(error):
         return error
 
-
     @app.after_request
     def add_header(response):
         response.headers["Cache-Control"] = "no-store"
-        timestamp = strftime('[%Y-%b-%d %H:%M]')
-        print(f"{timestamp} {request.remote_addr} {request.method} {request.scheme} {request.full_path} {response.status}")
+        timestamp = strftime("[%Y-%b-%d %H:%M]")
+        print(
+            f"{timestamp} {request.remote_addr} {request.method} {request.scheme} {request.full_path} {response.status}"
+        )
         return response
 
     return app
