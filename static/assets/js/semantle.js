@@ -20,7 +20,7 @@ const now = Date.now();
 const today = Math.floor(now / 86400000);
 const initialDay = 19042;
 const puzzleNumber = (today - initialDay) % secretWords.length;
-const handleStats = puzzleNumber > 25;
+const handleStats = puzzleNumber > 24;
 const yesterdayPuzzleNumber = (today - initialDay + secretWords.length - 1) % secretWords.length;
 const storage = window.localStorage;
 let caps = 0;
@@ -585,7 +585,7 @@ likhet på ${(similarityStory.rest * 100).toFixed(2)}.
         if (handleStats) {
             const totalGames = stats['wins'] + stats['giveups'] + stats['abandons'];
             response += `<br/>
-Statistik (vi började med statistik dag, på dag 25): <br/>
+Statistik (vi började med statistik dag, på dag 24): <br/>
 <table>
 <tr><th>Första dagen:</th><td>${stats['firstPlay']}</td></tr>
 <tr><th>Totalt antal dagar spelade:</th><td>${totalGames}</td></tr>
