@@ -72,13 +72,11 @@ def find_hints(secret, progress=True):
     reg = re.compile(".*\d.*")
 
     for word in worditer:
-        if reg.match(word):
-            continue
         vec = model[word]
         # why not model.wv.similarity(wordA, wordB)?
         similarity = dot(vec, target_vec) / (norm(vec) * target_vec_norm)
         heapq.heappush(nearest, (similarity, word))
-        if len(nearest) > 1000:
+        if len(nearest) > 1000 or reg.match(word):
             heapq.heappop(nearest)
     nearest.sort()
     return secret, nearest
