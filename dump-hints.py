@@ -13,6 +13,8 @@ import math
 import heapq
 import json
 
+import os
+
 from numpy import dot
 from numpy.linalg import norm
 
@@ -118,7 +120,7 @@ if __name__ == "__main__":
         mapper = tqdm.contrib.concurrent.process_map(
             partial(find_hints, progress=False),
             secrets,
-            max_workers=12,
+            max_workers=(os.cpu_count() + 4),
             chunksize=1,
             total=len(secrets),
         )
