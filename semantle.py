@@ -28,16 +28,6 @@ def create_app():
     def send_static(path):
         return send_from_directory("static/assets", path)
 
-    def expand_bfloat(vec, half_length=600):
-        """
-        expand truncated float32 to float32
-        """
-        if len(vec) == half_length:
-            vec = b"".join(
-                (b"\00\00" + bytes(pair)) for pair in zip(vec[::2], vec[1::2])
-            )
-        return vec
-
     @app.route("/model/<string:word>")
     def word(word):
         try:
