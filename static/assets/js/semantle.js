@@ -20,7 +20,6 @@ const now = Date.now();
 const today = Math.floor(now / 86400000);
 const initialDay = 19083;
 const puzzleNumber = (today - initialDay) % secretWords.length;
-const handleStats = True;
 const yesterdayPuzzleNumber = (today - initialDay + secretWords.length - 1) % secretWords.length;
 const storage = window.localStorage;
 let caps = 0;
@@ -393,13 +392,13 @@ likhet på ${(similarityStory.rest * 100).toFixed(2)}.
                 const newEntry = [similarity, guess, percentile, guessCount];
                 guesses.push(newEntry);
 
-                if (handleStats) {
-                    const stats = getStats();
-                    if (!gameOver) {
-                        stats['totalGuesses'] += 1;
-                    }
-                    storage.setItem('stats', JSON.stringify(stats));
+
+                const stats = getStats();
+                if (!gameOver) {
+                    stats['totalGuesses'] += 1;
                 }
+                storage.setItem('stats', JSON.stringify(stats));
+                
             }
             guesses.sort(function(a, b){return b[0]-a[0]});
 
@@ -550,26 +549,25 @@ likhet på ${(similarityStory.rest * 100).toFixed(2)}.
 
     function endGame(won, countStats) {
         let stats;
-        if (handleStats) {
-            stats = getStats();
-            if (countStats) {
-                const onStreak = (stats['lastEnd'] == puzzleNumber - 1);
+        stats = getStats();
+        if (countStats) {
+            const onStreak = (stats['lastEnd'] == puzzleNumber - 1);
 
-                stats['lastEnd'] = puzzleNumber;
-                if (won) {
-                    if (onStreak) {
-                        stats['winStreak'] += 1;
-                    } else {
-                    stats['winStreak'] = 1;
-                    }
-                    stats['wins'] += 1;
+            stats['lastEnd'] = puzzleNumber;
+            if (won) {
+                if (onStreak) {
+                    stats['winStreak'] += 1;
                 } else {
-                    stats['winStreak'] = 0;
-                    stats['giveups'] += 1;
+                stats['winStreak'] = 1;
                 }
-                storage.setItem("stats", JSON.stringify(stats));
+                stats['wins'] += 1;
+            } else {
+                stats['winStreak'] = 0;
+                stats['giveups'] += 1;
             }
+            storage.setItem("stats", JSON.stringify(stats));
         }
+        
 
         $('#give-up-btn').style = "display:none;";
         $('#response').classList.add("gaveup");
@@ -582,9 +580,8 @@ likhet på ${(similarityStory.rest * 100).toFixed(2)}.
             response = `<b>Du gav upp! Det hemliga ordet är ${secret}</b>. Fortsätt gärna att testa ord om du är nyfiken på deras likhet med det hemliga ordet. Du kan se de närmaste orden <a href="nearby_1k/${secretBase64}">här</a>.`;
         }
 
-        if (handleStats) {
-            const totalGames = stats['wins'] + stats['giveups'] + stats['abandons'];
-            response += `<br/>
+        const totalGames = stats['wins'] + stats['giveups'] + stats['abandons'];
+        response += `<br/>
 Statistik (vi började med statistik på dag 25): <br/>
 <table>
 <tr><th>Första dagen:</th><td>${stats['firstPlay']}</td></tr>
@@ -597,7 +594,6 @@ Statistik (vi började med statistik på dag 25): <br/>
 <tr><th>Antalet gissningar i genomsnitt:</th><td>${(stats['totalGuesses'] / totalGames).toFixed(2)}</td></tr>
 </table>
 `;
-        }
 
         $('#response').innerHTML = response;
 
