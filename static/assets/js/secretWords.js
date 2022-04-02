@@ -3,6 +3,6 @@
  * (partially) translated and somewhat filtered.
  */
 secretWords = [
-"bil",
+"ned",
 "opp"
 ]
