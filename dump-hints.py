@@ -30,7 +30,7 @@ ALL_WORDS = False
 
 
 model = word2vec.KeyedVectors.load_word2vec_format(
-    "../no.vec", binary=False
+    "../no.bin", binary=True
 )
 
 

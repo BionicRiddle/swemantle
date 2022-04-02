@@ -12,7 +12,7 @@ import tqdm
 from more_itertools import chunked
 
 model = word2vec.KeyedVectors.load_word2vec_format(
-    "../no.vec", binary=False
+    "../no.bin", binary=True
 )
 
 con = sqlite3.connect("word2vec.db")
