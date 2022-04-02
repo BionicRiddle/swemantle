@@ -18,9 +18,9 @@ let guessCount = 0;
 let model = null;
 const now = Date.now();
 const today = Math.floor(now / 86400000);
-const initialDay = 19042;
+const initialDay = 19083;
 const puzzleNumber = (today - initialDay) % secretWords.length;
-const handleStats = puzzleNumber >= 25;
+const handleStats = True;
 const yesterdayPuzzleNumber = (today - initialDay + secretWords.length - 1) % secretWords.length;
 const storage = window.localStorage;
 let caps = 0;
@@ -90,7 +90,7 @@ function share() {
 
     let copied = false;
     try {
-        copied = ClipboardJS.copy(text + " https://swemantle.riddle.nu/");
+        copied = ClipboardJS.copy(text + " https://nomantle.riddle.nu/");
     } catch (err) {
         console.log("Failed to copy to to clipboard", err);
     }
@@ -104,9 +104,9 @@ function share() {
     };
 
     const shareData = {
-        "title": "Swemantle",
+        "title": "Nomantle",
         "text": text,
-        "url": "https://swemantle.riddle.nu/",
+        "url": "https://nomantle.riddle.nu/",
     }
     if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
         navigator.share(shareData)
