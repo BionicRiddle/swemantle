@@ -39,7 +39,7 @@ def create_app():
             if not res:
                 return ""
             res = res[0]
-            return jsonify(list(struct.unpack("300f", res)))
+            return jsonify(list(struct.unpack("1200f", res)))
         except Exception as e:
             print(e)
             return jsonify(e)
@@ -60,7 +60,7 @@ def create_app():
             if not row:
                 return ""
             vec = row[0]
-            result = {"vec": list(struct.unpack("300f", vec))}
+            result = {"vec": list(struct.unpack("1200f", vec))}
             if row[1]:
                 result["percentile"] = row[1]
             return jsonify(result)
