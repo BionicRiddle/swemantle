@@ -43,7 +43,7 @@ def create_app():
     
     @app.route("/mp/create/")
     def create():
-        gid = str(uuid.uuidx4())
+        gid = str(uuid.uuid4())
         return ("Created GID: " + gid)
 
     @app.route("/model/<string:word>")
