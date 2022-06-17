@@ -9,6 +9,7 @@ from flask import (
 import struct
 import sqlite3
 import base64
+import uuid
 from time import strftime
 
 
@@ -27,6 +28,23 @@ def create_app():
     @app.route("/assets/<path:path>")
     def send_static(path):
         return send_from_directory("static/assets", path)
+
+    @app.route("/mp/<string:gid>/<string:word>")
+    def mp_guess(secret, word):
+        return (secret + " " +  word)
+
+    @app.route("/mp/connect/<string:gid>")
+    def join(gid):
+        return ("Joined GID: " + gid)
+
+    @app.route("/mp/leave/<string:gid>")
+    def leave(gid):
+        return ("Leaved GID: " + gid)
+    
+    @app.route("/mp/create/")
+    def create():
+        gid = str(uuid.uuidx4())
+        return ("Created GID: " + gid)
 
     @app.route("/model/<string:word>")
     def word(word):
